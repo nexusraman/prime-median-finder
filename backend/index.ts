@@ -1,25 +1,15 @@
-import express, { Request, Response } from 'express'
-import { getPrimeMedians } from './primes'
+import express from 'express'
+import primeMedianRoutes from './routes/primeMedianRoutes'
+import cors from 'cors'
 
 const app = express()
 const PORT = process.env.PORT || 5000
 
 app.use(express.json())
 
-app.get('/api/getPrimeMedians', (req: Request, res: Response) => {
-    console.log(req.query)
-    const n = parseInt(req.query.n as string)
-    if (!isNaN(n)) {
-        const medians = getPrimeMedians(n)
-        res.json({ medians })
-    } else {
-        res.status(400).json({ error: 'Invalid input' })
-    }
-})
+app.use(cors())
 
-app.get('*', (res: Response) => {
-    res.send('Welcome to the Prime Median Finder API')
-})
+app.use('/api', primeMedianRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
